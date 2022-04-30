@@ -30,6 +30,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# AUTH USER 사용
+AUTH_USER_MODEL = "shortener.Users"
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
