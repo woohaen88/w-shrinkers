@@ -322,4 +322,4 @@ sketch
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pycharm,django,react
-**/migrations/*
+# **/migrations/*
