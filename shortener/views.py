@@ -1,7 +1,8 @@
-from django.shortcuts import redirect, render
-from shortener.forms import SignupForm
+from django.shortcuts import redirect, render, get_object_or_404
+from shortener.forms import SigninForm, SignupForm
 from shortener.models import Users as UserModel
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -35,3 +36,24 @@ def signup(request):
         form = SignupForm()
     context = {"form" : form}
     return render(request, 'signup.html', context)
+
+
+# signin
+def signin(request):
+    if request.method == "POST":
+        form = SigninForm(request.POST)
+        if form.is_valid():            
+            email = form.cleaned_data.get("email")
+            user = UserModel.objects.get(email=email)
+            raw_password = form.cleaned_data.get("password")
+            if user.check_password(raw_password):
+                login(request, user)
+                return redirect('index')
+        else:
+            messages.error(request, "아이디나 비번 틀림")
+
+    else:
+        form = SigninForm()
+
+    context = {"form" : form}
+    return render(request, "signin.html", context=context)

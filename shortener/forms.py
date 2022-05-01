@@ -19,3 +19,14 @@ class SignupForm(UserCreationForm):
             "password1",
             "password2",
         )
+
+class SigninForm(forms.ModelForm):
+    email = forms.CharField(max_length=254, help_text="Required", label="email", widget=forms.EmailInput())
+    password = forms.CharField(max_length=20, help_text="Required", label="password", widget=forms.PasswordInput())
+
+    class Meta:
+        model = UserModel
+        fields = (
+            "email",
+            "password"
+        )

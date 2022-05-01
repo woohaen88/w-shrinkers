@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from shortener.views import index, signup
+from shortener.views import index, signup, signin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", index, name="index" ),    
-    path("signup/", signup, name="signup")
+    path("signup/", signup, name="signup"),
+    path("signin/", signin, name="signin")
 ]
