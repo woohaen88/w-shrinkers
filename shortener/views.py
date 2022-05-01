@@ -6,16 +6,16 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    print(request.user.pay_plan.name)
-    user = UserModel.objects.filter(username=request.user.email).first()
-    email = user.email if user else "Anonymous Email!"
+    # # print(request.user.pay_plan.name)
+    # user = UserModel.objects.filter(username=request.user.email).first()
+    # email = user.email if user else "Anonymous Email!"
 
-    if not request.user.is_authenticated:
-        email = "Anonymous Email!"
+    # if not request.user.is_authenticated:
+    #     email = "Anonymous Email!"
 
     context = {
         "welcome_msg" : "hi hi hi hi hi hi hi hi hi hi",
-        "email" : email
+        
     }
     return render(request, 'index.html', context=context)
 
@@ -44,6 +44,7 @@ def signin(request):
         form = SigninForm(request.POST)
         if form.is_valid():            
             email = form.cleaned_data.get("email")
+            print(email)
             user = UserModel.objects.get(email=email)
             raw_password = form.cleaned_data.get("password")
             if user.check_password(raw_password):
