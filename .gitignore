@@ -323,3 +323,4 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pycharm,django,react
 shortener/migrations/0*
+.idea/
