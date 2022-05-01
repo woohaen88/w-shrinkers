@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from shortener.views import index
+from shortener.views import index, signup
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", index, name="index" ),    
+    path("signup/", signup, name="signup")
 ]
