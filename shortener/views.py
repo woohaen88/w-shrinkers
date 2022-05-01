@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 def index(request):
     print(request.user.pay_plan.name)
-    user = UserModel.objects.filter(username="admin").first()
+    user = UserModel.objects.filter(username=request.user.email).first()
     email = user.email if user else "Anonymous Email!"
 
     if not request.user.is_authenticated:
