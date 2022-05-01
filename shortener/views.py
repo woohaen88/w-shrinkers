@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from shortener.forms import SigninForm, SignupForm
 from shortener.models import Users as UserModel
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 # Create your views here.
@@ -57,3 +57,7 @@ def signin(request):
 
     context = {"form" : form}
     return render(request, "signin.html", context=context)
+
+def signout(request):
+    logout(request)
+    return redirect('signin')
