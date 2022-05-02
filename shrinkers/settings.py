@@ -43,7 +43,7 @@ INTERNAL_IPS = [
 # Application definition
 
 # AUTH USER 사용
-AUTH_USER_MODEL = "shortener.Users"
+# AUTH_USER_MODEL = "shortener.Users"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -91,8 +91,16 @@ WSGI_APPLICATION = 'shrinkers.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'testdb',
+        'USER' : 'root',
+        'PASSWORD' : 'password',
+        'HOST' : '34.64.57.152',
+        'PORT' : 3306,
+        "OPTIONS" : {
+            'autocommit' : True,
+            'charset' : 'utf8mb4'
+        }
     }
 }
 
