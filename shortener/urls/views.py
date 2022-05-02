@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from shortener.forms import urlCreationForm
-from shortener.models import ShortenedUrls
+from shortener.models import ShortenedUrls, Statistic
 from django.shortcuts import render, redirect, get_object_or_404
-
+from ratelimit.decorators import ratelimit
+from django.contrib.gis.geoip2 import GeoIP2
 
 # url: urls, name="url_list"
 from shortener.utils import url_count_changer
@@ -69,8 +70,12 @@ def url_change(request, action, url_id):
         }
         return render(request, "url_create.html", context)
 
+
+@ratelimit(key="ip", rate="10/s")
 def url_redirect(request, prefix, url):
-    print(prefix, url)
+    was_limited = getattr(request, "limited", False)
+    if was_limited:
+        return redirect("index")
     get_url = get_object_or_404(ShortenedUrls, prefix=prefix, shortened_url=url)
     is_permanent = False
     target = get_url.target_url
@@ -79,4 +84,7 @@ def url_redirect(request, prefix, url):
 
     if not target.startswith("https://") and not target.startswith("http://"):
         target = "https://" + get_url.target_url
+
+    history = Statistic()
+    history.record(request, get_url)
     return redirect(target, permanent=is_permanent)

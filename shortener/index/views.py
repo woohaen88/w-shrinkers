@@ -1,6 +1,6 @@
-from django.shortcuts import redirect, render, get_object_or_404
-from shortener.forms import SigninForm, SignupForm, urlCreationForm
-from shortener.models import Users as UserModel, ShortenedUrls
+from django.shortcuts import redirect, render
+from shortener.forms import SigninForm, SignupForm
+from shortener.models import Users as UserModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,8 +9,8 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
-    user = UserModel.objects.filter(id=request.user.id).first()
-    email = user.email if user else "Anonymous Email!"
+    u = UserModel.objects.filter(user__id=request.user.id).first()
+    email = u.user.email if u else "Anonymous Email!"
 
     if not request.user.is_authenticated:
         email = "Anonymous Email!"
@@ -75,7 +75,7 @@ def signin(request):
 # url: signout, name="signout"
 def signout(request):
     logout(request)
-    return redirect('signin')
+    return redirect('auth:signin')
 
 
 # url: urls, name="list_view"
