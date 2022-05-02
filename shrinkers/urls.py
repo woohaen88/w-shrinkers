@@ -18,11 +18,14 @@ from django.urls import path
 from django.conf.urls import include
 
 from shortener.urls.views import url_redirect
-
+from shortener.urls.urls import router as url_router
 
 urlpatterns = [
+
     path("admin/", admin.site.urls),
     path("", include("shortener.index.urls")),
     path("urls/", include("shortener.urls.urls")),
+    path("api/", include(url_router.urls)),
+
     path("<str:prefix>/<str:url>", url_redirect),
 ]

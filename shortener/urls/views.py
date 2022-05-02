@@ -88,4 +88,5 @@ def url_redirect(request, prefix, url):
     custom_params = request.GET.dict() if request.GET.dict() else None
     history = Statistic()
     history.record(request, get_url, custom_params)
+
     return redirect(target, permanent=is_permanent)

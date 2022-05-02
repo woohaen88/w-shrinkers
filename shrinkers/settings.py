@@ -54,7 +54,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shortener.apps.ShortenerConfig',
     'django_user_agents',
+    'rest_framework',
 ]
+
+# django rest framework options
+# https://www.django-rest-framework.org/api-guide/pagination/#pagination
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
