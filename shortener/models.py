@@ -7,14 +7,21 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class PayPlan(models.Model):
+class TimeStampedModel(models.Model):
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # 기본적으로 이 테이블을 만들려고함
+    class Meta:
+        abstract = True
+
+class PayPlan(TimeStampedModel):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
-    updated_at = models.DateTimeField(auto_now=True)
-    create_at = models.DateTimeField(auto_now_add=True)
 
 
-class Organization(models.Model):
+
+class Organization(TimeStampedModel):
     class Industries(models.TextChoices):
         PERSONAL = 'personal'
         RETAIL = 'retail'
@@ -24,31 +31,28 @@ class Organization(models.Model):
     name = models.CharField(max_length=50) # 회사이름
     industry = models.CharField(max_length=15, choices=Industries.choices, default=Industries.OTHERS)
     pay_plan = models.ForeignKey(PayPlan, on_delete=models.DO_NOTHING, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-class Users(models.Model):
+
+class Users(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
     full_name = models.CharField(max_length=100, null=True)
 
 
-class EmailVerification(models.Model):
+class EmailVerification(TimeStampedModel):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     key = models.CharField(max_length=100, null=True)
     verified = models.BooleanField(default=False)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-class Categories(models.Model):
+
+class Categories(TimeStampedModel):
     name = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
     creator = models.ForeignKey(Users, on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
-class ShortenedUrls(models.Model):
+
+class ShortenedUrls(TimeStampedModel):
     class UrlCreatedVia(models.TextChoices):
         WEBSITE = "web"
         TELEGRAM = "telegram"
@@ -64,5 +68,3 @@ class ShortenedUrls(models.Model):
     target_url = models.CharField(max_length=2000)
     shortened_url = models.CharField(max_length=6, default=rand_string)
     created_via = models.CharField(max_length=8, choices=UrlCreatedVia.choices, default=UrlCreatedVia.WEBSITE)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
