@@ -15,10 +15,10 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+
 class PayPlan(TimeStampedModel):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
-
 
 
 class Organization(TimeStampedModel):
@@ -28,15 +28,18 @@ class Organization(TimeStampedModel):
         MANUFACTURING = 'manufacturing'
         IT = 'it'
         OTHERS = 'others'
-    name = models.CharField(max_length=50) # 회사이름
+
+    name = models.CharField(max_length=50)  # 회사이름
     industry = models.CharField(max_length=15, choices=Industries.choices, default=Industries.OTHERS)
     pay_plan = models.ForeignKey(PayPlan, on_delete=models.DO_NOTHING, null=True)
 
 
-class Users(TimeStampedModel):
+class Users(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
     full_name = models.CharField(max_length=100, null=True)
+    organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
+    url_count = models.IntegerField(default=0)
+
 
 
 class EmailVerification(TimeStampedModel):
@@ -51,7 +54,6 @@ class Categories(TimeStampedModel):
     creator = models.ForeignKey(Users, on_delete=models.CASCADE)
 
 
-
 class ShortenedUrls(TimeStampedModel):
     class UrlCreatedVia(models.TextChoices):
         WEBSITE = "web"
@@ -61,10 +63,14 @@ class ShortenedUrls(TimeStampedModel):
         str_pool = string.digits = string.ascii_letters
         return ("".join([random.choice(str_pool) for _ in range(6)])).lower()
 
+    def rand_letter():
+        str_pool = string.ascii_letters
+        return random.choice(str_pool).lower()
+
     nick_name = models.CharField(max_length=100)
     category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING, null=True)
-    prefix = models.CharField(max_length=50)
-    created_by = models.ForeignKey(Users, on_delete=models.CASCADE)
+    prefix = models.CharField(max_length=50, default=rand_letter)
+    creator  = models.ForeignKey(Users, on_delete=models.CASCADE)
     target_url = models.CharField(max_length=2000)
     shortened_url = models.CharField(max_length=6, default=rand_string)
     created_via = models.CharField(max_length=8, choices=UrlCreatedVia.choices, default=UrlCreatedVia.WEBSITE)

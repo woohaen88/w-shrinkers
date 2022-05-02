@@ -14,8 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from shortener.views import index, signup, signin, signout, url_list, url_create, url_change
+from django.urls import path, include
+from shortener.views import (index,
+                             signup,
+                             signin,
+                             signout)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,7 +26,7 @@ urlpatterns = [
     path("signup/", signup, name="signup"),
     path("signin/", signin, name="signin"),
     path("signout/", signout, name="signout"),
-    path("urls", url_list, name="url_list"),
-    path("urls/create", url_create, name="url_create"),
-    path("urls/<str:action>/<int:url_id>", url_change, name="url_change"),
+
+    # url 기능 분리
+    path("urls/", include("shortener.urls.urls")),
 ]

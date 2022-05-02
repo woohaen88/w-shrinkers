@@ -20,13 +20,6 @@ def index(request):
     }
     return render(request, 'base.html', context=context)
 
-
-# url: urls, name="url_list"
-def url_list(request):
-    get_list = ShortenedUrls.objects.order_by("-created_at").all()
-    return render(request, "url_list.html", {"list": get_list})
-
-
 # signup
 # url: signup, name="signup"
 def signup(request):
@@ -58,13 +51,13 @@ def signin(request):
             raw_password = form.cleaned_data.get("password")
             remember_me = form.cleaned_data.get("remember_me")
             try:
-                user = UserModel.objects.get(email=email)
+                u = UserModel.objects.get(user__email=email)
             except Exception:
                 pass
             else:
-                if user.check_password(raw_password):
+                if u.user.check_password(raw_password):
                     msg = None
-                    login(request, user)
+                    login(request, u.user)
                     is_ok = True
                     request.session["remember_me"] = remember_me
         else:
@@ -99,53 +92,6 @@ def list_view(request):
     # url: urls/create, name="url_create"
 
 
-@login_required
-def url_create(request):
-    msg = None
-    if request.method == 'POST':
-        form = urlCreationForm(request.POST)
-        if form.is_valid():
-            msg = f"{form.cleaned_data.get('nick_name')} 생성완료"
-            messages.add_message(request, messages.INFO, msg)
-            form.save(request)
-            return redirect("url_list")
-        else:
-            form = urlCreationForm()
-    else:
-        form = urlCreationForm()
 
-
-    context = {"form": form}
-    return render(request, "url_create.html", context)
-
-
-# url_change
-@login_required
-def url_change(request, action, url_id):
-    # post 요청
-    if request.method == 'POST':
-        url_data = ShortenedUrls.objects.filter(id=url_id)
-        if url_data.exists(): # url data가 있으면
-            if url_data.first().created_by_id != request.user.id: # url_data의 id비교
-                msg = "자신이 소유하지 않은  url입니다."
-            elif action == 'delete':
-                msg = f"{url_data.first().nick_name} 삭제 완료!"
-                url_data.delete()
-                messages.add_message(request, messages.INFO, msg)
-            elif action == 'update':
-                msg = f"{url_data.first().nick_name} 수정 완료!"
-                form = urlCreationForm(request.POST)
-                form.update_form(request, url_id)
-                messages.add_message(request, messages.INFO, msg)
-
-
-        else:
-            msg = "해당 URL정보를 찾을 수 업습니다."
-
-    # get 요청
-    elif request.method == 'GET' and action == 'update':
-        url_data = ShortenedUrls.objects.filter(pk=url_id).first()
-        form = urlCreationForm(instance=url_data)
-        return render(request, "url_create.html", {"form": form, "is_update": True})
 
 
