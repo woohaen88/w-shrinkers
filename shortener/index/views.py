@@ -87,11 +87,3 @@ def list_view(request):
     users = paginator.get_page(page)
 
     return render(request, "boards.html", {"users": users})
-
-
-    # url: urls/create, name="url_create"
-
-
-
-
-

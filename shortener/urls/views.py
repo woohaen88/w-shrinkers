@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from shortener.forms import urlCreationForm
 from shortener.models import ShortenedUrls
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 # url: urls, name="url_list"
@@ -68,3 +68,15 @@ def url_change(request, action, url_id):
             "is_update": True
         }
         return render(request, "url_create.html", context)
+
+def url_redirect(request, prefix, url):
+    print(prefix, url)
+    get_url = get_object_or_404(ShortenedUrls, prefix=prefix, shortened_url=url)
+    is_permanent = False
+    target = get_url.target_url
+    if get_url.creator.organization:
+        is_permanent = True
+
+    if not target.startswith("https://") and not target.startswith("http://"):
+        target = "https://" + get_url.target_url
+    return redirect(target, permanent=is_permanent)

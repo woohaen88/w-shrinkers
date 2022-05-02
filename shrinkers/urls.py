@@ -15,17 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from shortener.views import (index,
-                             signup,
-                             signin,
-                             signout)
+from shortener.urls.views import url_redirect
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", index, name="index" ),
-    path("signup/", signup, name="signup"),
-    path("signin/", signin, name="signin"),
-    path("signout/", signout, name="signout"),
+
+    # index
+    path("", include("shortener.index.urls")),
+    path("<str:prefix>/<str:url>/", url_redirect),
 
     # url 기능 분리
     path("urls/", include("shortener.urls.urls")),

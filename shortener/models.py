@@ -70,7 +70,19 @@ class ShortenedUrls(TimeStampedModel):
     nick_name = models.CharField(max_length=100)
     category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING, null=True)
     prefix = models.CharField(max_length=50, default=rand_letter)
-    creator  = models.ForeignKey(Users, on_delete=models.CASCADE)
+    creator = models.ForeignKey(Users, on_delete=models.CASCADE)
     target_url = models.CharField(max_length=2000)
     shortened_url = models.CharField(max_length=6, default=rand_string)
     created_via = models.CharField(max_length=8, choices=UrlCreatedVia.choices, default=UrlCreatedVia.WEBSITE)
+    expired_at = models.DateTimeField(null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=[
+                    "prefix",
+                    "shortened_url",
+                ]
+            )
+        ]
+
