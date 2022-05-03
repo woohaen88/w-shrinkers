@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'shortener.apps.ShortenerConfig',
     'django_user_agents',
     'rest_framework',
+    'drf_yasg',
 ]
 
 # django rest framework options

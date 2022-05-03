@@ -50,7 +50,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UrlListSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get", "post"])
     def add_click(self, request, *args, **kwargs):
         queryset = self.get_queryset().filter(pk=kwargs['pk'], creator_id=request.user.id)
         if not queryset.exists():
