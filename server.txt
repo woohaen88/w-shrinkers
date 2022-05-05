@@ -4,7 +4,7 @@
 
 
 sudo apt install -y python3-pip python3.8-dev libpq-dev libmysqlclient-dev nginx curl
-sudo apt-get install -y python3.8 python3.8-dev build-essential libssl-dev libffi-dev libxml2-dev
+sudo apt-get install -y python3.8 python3.8-dev build-essential libssl-dev libffi-dev libxml2-dev libpq-dev libmysqlclient-dev nginx curl
 
 apt-get install python3.8-venv
 sudo apt-get install python3.8 python3.8-venv python-dev python3.8-dev build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev python3-pip
